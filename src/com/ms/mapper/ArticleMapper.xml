@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper	namespace="com.ms.mapper.ArticleMapper">	
+    <resultMap id="ArticleResultMap" type="com.ms.model.Article">
+        <id property="id" column="a_id"/>
+        <result property="title" column="a_title"/>
+        <result property="date" column="a_date"/>
+        <result property="content" column="a_content"/>
+        <result property="click" column="click"/>
+        
+    </resultMap>
+    
+    <select id="getAll" resultMap="ArticleResultMap">
+        select * from article
+    </select>
+    
+    <select id="getArtById" resultMap="ArticleResultMap">
+        select * from article where a_id = #{id}
+    </select>
+    
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into article(a_title,a_date,a_content) values(#{title}#{date}#{content}) 
+    </insert>
+    
+    <update id="update" >
+        update article set a_content = #{content}, a_title = #{title} where a_id=#{id}
+    </update>
+    
+    <delete id="delete" >
+        delete from article where a_id = #{id}
+    </delete>
+    
+    <select id="getCategroy" resultMap="ArticleResultMap">
+        select a_title,article.a_id,a_content,a_date from article inner join categroies on article.a_id = categroies.a_id where categroy=#{cag}
+    </select>
+    
+    <update id="addClick">
+        update article set click = click+1 where a_id=#{id};
+    </update>
+    
+    <select id="getPopular" resultMap="ArticleResultMap" >
+         SELECT * FROM article order by click desc limit 5 
+    </select>
+    
+     <select id="getNum" resultType="int">
+		 select sum(click) from article inner join categroies on article.a_id=categroies.a_id where categroy=#{cate} ;    
+     </select>
+     
+     <select id="getClicks" resultType="int">
+         		 select sum(click) from article inner join categroies on article.a_id=categroies.a_id where categroy=#{cate} ;
+     </select>
+</mapper>

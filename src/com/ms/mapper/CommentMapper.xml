@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ms.mapper.CommentMapper">
+    
+    <resultMap id="CommentResultMap" type="com.ms.model.Comment">
+        <id property="cid" column="c_id" />
+        <result property="aid" column="a_id"/>
+        <result property="email" column="email"/>
+        <result property="name" column="name"/>      
+        <result property="content" column="content"/>
+        <result property="state" column="state"/>
+        <result property="date" column="date"/>
+        
+        
+    </resultMap>
+    
+    <select id="getCommentsByaId" resultMap="CommentResultMap" parameterType="int">
+        select * from comment where a_id=#{aid}
+    </select>
+    
+    <insert id="add" useGeneratedKeys="true" keyProperty="Cid">
+        insert into comment(a_id,name,content,email,date) values(#{aid},#{name},#{content},#{email},#{date})
+    </insert>
+    
+    <delete id="delete" >
+        delete from comment where c_id=#{cid}
+    </delete>
+    
+    <select id="getCount" resultType="int">
+		 select count(*) from comment where state=0
+    </select>
+    
+     <select id="getNum" resultType="int">
+		 select count(*) from comment where a_id=#{id} ;
+    </select>
+    
+    <select id="getUnread" resultMap="CommentResultMap">
+        select * from comment where state=0;
+    </select>
+    
+    <update id="changeState">
+        update comment set state=1 where state=0;
+    </update>
+    
+</mapper>
